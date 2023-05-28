@@ -1,5 +1,6 @@
 package spring6api.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 
@@ -12,5 +13,6 @@ public class BookDTO {
     @NonNull
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String name;
+
     private AuthorDTO author;
 }

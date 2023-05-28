@@ -1,5 +1,6 @@
 package spring6api.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -24,5 +25,7 @@ public class AuthorDTO {
     @NotEmpty
     @Size(max = 255)
     private String name;
+
+    @JsonIgnore
     private Set<BookDTO> books = new HashSet<>();
 }
