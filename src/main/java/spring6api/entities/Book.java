@@ -1,9 +1,9 @@
 package spring6api.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
-import spring6api.models.AuthorDTO;
 
 @Getter
 @Setter
@@ -20,5 +20,6 @@ public class Book {
     private String name;
     @ManyToOne
     @JoinColumn(name = "author_id")
+    @JsonBackReference
     private Author author;
 }
