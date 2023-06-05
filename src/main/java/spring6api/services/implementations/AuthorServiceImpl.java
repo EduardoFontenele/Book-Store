@@ -2,6 +2,7 @@ package spring6api.services.implementations;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import spring6api.entities.Author;
 import spring6api.factories.AuthorFactory;
 import spring6api.mappers.AuthorMapper;
@@ -14,6 +15,7 @@ import spring6api.services.AuthorService;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Service
 @RequiredArgsConstructor
@@ -32,15 +34,15 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    public AuthorFullDTO getAuthorWithBooksById(Integer id) {
+    public Optional<AuthorFullDTO> getAuthorWithBooksById(Integer id) {
         Author author = authorRepository.findById(id).get();
-        return AuthorFactory.entityToFullDto(author);
+        return Optional.of(AuthorFactory.entityToFullDto(author));
     }
 
     @Override
-    public AuthorDTO getAuthorById(Integer id) {
+    public Optional<AuthorDTO> getAuthorById(Integer id) {
         Author author = authorRepository.findById(id).get();
-        return authorMapper.entityToDto(author);
+        return Optional.of(authorMapper.entityToDto(author));
     }
 
     @Override
@@ -49,6 +51,25 @@ public class AuthorServiceImpl implements AuthorService {
         return authorList.stream()
                 .map(authorMapper::entityToDto)
                 .toList();
+    }
+
+    @Override
+    public Boolean deleteAuthorById(Integer id) {
+        if(authorRepository.existsById(id)) {
+            authorRepository.deleteById(id);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    @Transactional
+    public Boolean updateAuthorById(Integer id, AuthorDTO dto) {
+        if(authorRepository.existsById(id)) {
+            authorRepository.updateName(id, dto.getName());
+            return true;
+        }
+        return false;
     }
 
 }
