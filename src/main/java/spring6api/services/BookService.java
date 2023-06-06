@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface BookService {
-    public BookDTO saveNewBook(BookDTO dto);
+    BookDTO saveNewBook(BookDTO dto);
 
     Optional<BookDTO> findBookById(Integer id);
 
