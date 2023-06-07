@@ -1,0 +1,1 @@
+alter table books rename column category to main_category;

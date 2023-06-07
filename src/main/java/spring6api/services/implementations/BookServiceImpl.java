@@ -3,6 +3,7 @@ package spring6api.services.implementations;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import spring6api.entities.Book;
 import spring6api.factories.BookFactory;
 import spring6api.mappers.BookMapper;
@@ -42,5 +43,24 @@ public class BookServiceImpl implements BookService {
         return books.stream()
                 .map(bookMapper::entityToDto)
                 .toList();
+    }
+
+    @Override
+    @Transactional
+    public Boolean updateBookById(Integer id, BookDTO dto) {
+        if(bookRepository.existsById(id)) {
+            bookRepository.findById(id).ifPresent(foundBook -> {
+                foundBook.setId(id);
+                foundBook.setName(dto.getName());
+                foundBook.setQuantity(dto.getQuantity());
+                foundBook.setPrice(dto.getPrice());
+                foundBook.setDescription(dto.getDescription());
+                foundBook.setMain_category(dto.getCategory());
+                foundBook.setAuthor(foundBook.getAuthor());
+            });
+            return true;
+        };
+
+        return false;
     }
 }

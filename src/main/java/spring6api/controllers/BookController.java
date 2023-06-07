@@ -38,4 +38,11 @@ public class BookController {
         return bookService.findAllBooks();
     }
 
+    @PutMapping(value = BOOK_PATH_ID)
+    public ResponseEntity<Void> updateBookById(@PathVariable Integer id, @RequestBody @Validated BookDTO book) {
+        if(id == null || id <= 0) throw new NullPathVarException();
+        if(!bookService.updateBookById(id, book)) throw new NotFoundException();
+        return ResponseEntity.ok().build();
+    }
+
 }

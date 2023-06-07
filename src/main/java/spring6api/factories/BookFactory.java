@@ -11,6 +11,10 @@ public class BookFactory {
                 .id(entity.getId())
                 .name(entity.getName())
                 .author_id(entity.getAuthor().getId())
+                .price(entity.getPrice())
+                .description(entity.getDescription())
+                .quantity(entity.getQuantity())
+                .category(entity.getMain_category())
                 .build();
     }
 
