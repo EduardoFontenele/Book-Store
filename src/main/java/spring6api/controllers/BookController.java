@@ -1,7 +1,7 @@
 package spring6api.controllers;
 
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -12,7 +12,6 @@ import spring6api.models.BookDTO;
 import spring6api.services.BookService;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -34,8 +33,10 @@ public class BookController {
     }
 
     @GetMapping(value = BOOKS_PATH)
-    public List<BookDTO> findAllBooks() {
-        return bookService.findAllBooks();
+    public List<BookDTO> findAllBooks(
+            @RequestParam(required = false, name = "category") String bookCategory,
+            @RequestParam(required = false, name = "author") String author) {
+        return bookService.findAllBooks(bookCategory, author);
     }
 
     @PutMapping(value = BOOK_PATH_ID)
@@ -45,4 +46,13 @@ public class BookController {
         return ResponseEntity.ok().build();
     }
 
+    @DeleteMapping(value = BOOK_PATH_ID)
+    public ResponseEntity<Void> deleteBookById(@PathVariable Integer id) {
+        if(id == null || id <= 0) throw new NullPathVarException();
+        if(!bookService.deleteBookById(id)) throw new NotFoundException();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Path", "book/" + id);
+        return ResponseEntity.ok().headers(headers).build();
+    }
 }

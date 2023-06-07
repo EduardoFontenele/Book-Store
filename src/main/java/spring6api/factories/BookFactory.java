@@ -10,11 +10,11 @@ public class BookFactory {
         return new BookDTO().builder()
                 .id(entity.getId())
                 .name(entity.getName())
-                .author_id(entity.getAuthor().getId())
+                .author(entity.getAuthor().getName())
                 .price(entity.getPrice())
                 .description(entity.getDescription())
                 .quantity(entity.getQuantity())
-                .category(entity.getMain_category())
+                .category(entity.getMainCategory())
                 .build();
     }
 

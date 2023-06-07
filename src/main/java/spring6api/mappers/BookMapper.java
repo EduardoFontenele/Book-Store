@@ -10,8 +10,8 @@ import spring6api.models.BookFullDTO;
 public interface BookMapper {
     public BookFullDTO entityToFullDto(Book entity);
     public Book fullDtoToEntity(BookFullDTO dto);
-    @Mapping(source = "main_category", target = "category")
+    @Mapping(source = "mainCategory", target = "category")
     public BookDTO entityToDto(Book entity);
-    @Mapping(source = "category", target = "main_category")
+    @Mapping(source = "category", target = "mainCategory")
     public Book dtoToEntity(BookDTO dto);
 }

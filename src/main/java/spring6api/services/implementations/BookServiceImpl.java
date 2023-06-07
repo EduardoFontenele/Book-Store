@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import spring6api.entities.Book;
 import spring6api.factories.BookFactory;
 import spring6api.mappers.BookMapper;
@@ -12,6 +13,7 @@ import spring6api.repositories.AuthorRepository;
 import spring6api.repositories.BookRepository;
 import spring6api.services.BookService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,11 +40,30 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<BookDTO> findAllBooks() {
-        List<Book> books = bookRepository.findAll();
-        return books.stream()
-                .map(bookMapper::entityToDto)
+    public List<BookDTO> findAllBooks(String bookCategory, String author) {
+
+        List<Book> listOfBooks;
+
+        if(StringUtils.hasText(bookCategory) && !StringUtils.hasText(author)) {
+            listOfBooks = listBooksByCategory(bookCategory);
+        }
+        else if(!StringUtils.hasText(bookCategory) && StringUtils.hasText(author)) {
+            listOfBooks = listBooksByAuthorName(author);
+        } else {
+            listOfBooks = bookRepository.findAll();
+        }
+
+        return listOfBooks.stream()
+                .map(BookFactory::entityToBookDto)
                 .toList();
+    }
+
+    private List<Book> listBooksByAuthorName(String author) {
+        return bookRepository.findAllByAuthor_Name(author);
+    }
+
+    private List<Book> listBooksByCategory(String category) {
+        return bookRepository.findAllByMainCategoryIsLikeIgnoreCase("%" + category + "%");
     }
 
     @Override
@@ -55,12 +76,21 @@ public class BookServiceImpl implements BookService {
                 foundBook.setQuantity(dto.getQuantity());
                 foundBook.setPrice(dto.getPrice());
                 foundBook.setDescription(dto.getDescription());
-                foundBook.setMain_category(dto.getCategory());
+                foundBook.setMainCategory(dto.getCategory());
                 foundBook.setAuthor(foundBook.getAuthor());
             });
             return true;
         };
 
+        return false;
+    }
+
+    @Override
+    public Boolean deleteBookById(Integer id) {
+        if(bookRepository.existsById(id)) {
+            bookRepository.deleteById(id);
+            return true;
+        }
         return false;
     }
 }

@@ -32,8 +32,8 @@ public class Book {
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    @Column(columnDefinition = "VARCHAR(50)")
-    private String main_category;
+    @Column(columnDefinition = "VARCHAR(50)", name = "main_category")
+    private String mainCategory;
 
     @ManyToOne
     @JoinColumn(name = "author_id")

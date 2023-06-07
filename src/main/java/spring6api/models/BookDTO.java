@@ -1,6 +1,5 @@
 package spring6api.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 
@@ -19,6 +18,7 @@ public class BookDTO {
     private Integer author_id;
     private Integer quantity = 0;
     private BigDecimal price = new BigDecimal(0);
+    private String author;
     private String description = "Descrição indisponível";
     private String category = "Não informada";
 }
