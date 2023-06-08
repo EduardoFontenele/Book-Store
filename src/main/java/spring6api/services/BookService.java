@@ -10,6 +10,6 @@ public interface BookService {
     Optional<BookDTO> findBookById(Integer id);
     List<BookDTO> findAllBooks(String bookCategory, String author);
     Boolean updateBookById(Integer id, BookDTO dto);
-
+    Boolean patchBookById(Integer id, BookDTO book);
     Boolean deleteBookById(Integer id);
 }

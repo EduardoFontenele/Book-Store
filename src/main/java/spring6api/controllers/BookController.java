@@ -43,8 +43,16 @@ public class BookController {
     public ResponseEntity<Void> updateBookById(@PathVariable Integer id, @RequestBody @Validated BookDTO book) {
         if(id == null || id <= 0) throw new NullPathVarException();
         if(!bookService.updateBookById(id, book)) throw new NotFoundException();
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
+
+    @PatchMapping(BOOK_PATH_ID)
+    public ResponseEntity<Void> patchBookById(@PathVariable Integer id, @RequestBody @Validated BookDTO book) {
+        if(id == null || id <= 0) throw new NullPathVarException();
+        if(!bookService.patchBookById(id, book)) throw new NotFoundException();
+        return ResponseEntity.noContent().build();
+    }
+
 
     @DeleteMapping(value = BOOK_PATH_ID)
     public ResponseEntity<Void> deleteBookById(@PathVariable Integer id) {

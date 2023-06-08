@@ -36,7 +36,10 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Optional<BookDTO> findBookById(Integer id) {
-        return Optional.of(bookMapper.entityToDto(bookRepository.findById(id).get()));
+        Book foundBook = bookRepository.findById(id).get();
+        BookDTO dto = bookMapper.entityToDto(foundBook);
+        dto.setAuthor(foundBook.getAuthor().getName());
+        return Optional.of(dto);
     }
 
     @Override
@@ -82,6 +85,23 @@ public class BookServiceImpl implements BookService {
             return true;
         };
 
+        return false;
+    }
+
+    @Override
+    public Boolean patchBookById(Integer id, BookDTO dto) {
+        if(bookRepository.existsById(id)) {
+            bookRepository.findById(id).ifPresent(foundBook -> {
+                foundBook.setName(dto.getName());
+                if(dto.getPrice() != null) foundBook.setPrice(dto.getPrice());
+                foundBook.setAuthor(foundBook.getAuthor());
+                if(dto.getQuantity() != null) foundBook.setQuantity(dto.getQuantity());
+                if(dto.getDescription() != null) foundBook.setDescription(dto.getDescription());
+                if(dto.getCategory() != null) foundBook.setMainCategory(dto.getCategory());
+                bookRepository.save(foundBook);
+            });
+            return true;
+        }
         return false;
     }
 

@@ -7,10 +7,6 @@ import spring6api.models.AuthorFullDTO;
 
 @Mapper
 public interface AuthorMapper {
-
-    public AuthorFullDTO entityToFullDto(Author entity);
-    public Author fullDtoToEntity(AuthorFullDTO dto);
-    public AuthorDTO entityToDto(Author entity);
-    public Author dtoToEntity(AuthorDTO dto);
-
+    AuthorDTO entityToDto(Author entity);
+    Author dtoToEntity(AuthorDTO dto);
 }

@@ -10,5 +10,4 @@ public interface AuthorRepository extends JpaRepository<Author, Integer> {
     @Modifying
     @Query("update Author author set author.name = :name where author.id = :id")
     void updateName(@Param("id") Integer id,@Param("name") String name);
-    Author findByNameLikeIgnoreCase(String name);
 }
