@@ -1,10 +1,10 @@
 package spring6api.controllers;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import spring6api.exceptions.NotFoundException;
@@ -12,9 +12,6 @@ import spring6api.exceptions.NullPathVarException;
 import spring6api.models.AuthorDTO;
 import spring6api.models.AuthorFullDTO;
 import spring6api.services.AuthorService;
-
-import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -30,17 +27,17 @@ public class AuthorController {
         return new ResponseEntity<>(authorService.saveNewAuthor(dto), HttpStatus.CREATED);
     }
     @GetMapping(value = AUTHORS_PATH)
-    public ResponseEntity<List<AuthorDTO>> findAllAuthors() {
-        return ResponseEntity.ok(authorService.getAuthors());
+    public Page<AuthorDTO> findAllAuthors(@RequestParam(name = "page", required = false) Integer pageNumber,
+                                          @RequestParam(name = "size", required = false) Integer pageSize) {
+        return authorService.getAuthors(pageNumber, pageSize);
     }
     @GetMapping(value = AUTHOR_COMPLETE_ID)
     public ResponseEntity<AuthorFullDTO> findAuthorWithBooksById(@PathVariable("id") Integer id) {
-        if(id == null || id <= 0) throw new NullPathVarException();
         return ResponseEntity.ok().body(authorService.getAuthorWithBooksById(id).orElseThrow(NotFoundException::new));
     }
     @GetMapping(value = AUTHOR_ONLY_PATH_ID)
     public AuthorDTO findAuthorById(@PathVariable("id") Integer id) {
-        if(id == null || id <= 0) throw new NullPathVarException();
+        if(id == null || id <= 0) throw new NullPathVarException("ID must not be null or negative");
         return authorService.getAuthorById(id).orElseThrow(NotFoundException::new);
     }
 

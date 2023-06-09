@@ -1,6 +1,7 @@
 package spring6api.controllers;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,8 +11,6 @@ import spring6api.exceptions.NotFoundException;
 import spring6api.exceptions.NullPathVarException;
 import spring6api.models.BookDTO;
 import spring6api.services.BookService;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -28,15 +27,17 @@ public class BookController {
 
     @GetMapping(value = BOOK_PATH_ID)
     public ResponseEntity<BookDTO> findBookById(@PathVariable("id") Integer id) {
-        if(id == null || id <= 0) throw new NullPathVarException();
+
         return ResponseEntity.ok(bookService.findBookById(id).orElseThrow(NotFoundException::new));
     }
 
     @GetMapping(value = BOOKS_PATH)
-    public List<BookDTO> findAllBooks(
+    public Page<BookDTO> findAllBooks(
             @RequestParam(required = false, name = "category") String bookCategory,
-            @RequestParam(required = false, name = "author") String author) {
-        return bookService.findAllBooks(bookCategory, author);
+            @RequestParam(required = false, name = "author") String author,
+            @RequestParam(required = false, name = "page") Integer pageNumber,
+            @RequestParam(required = false, name = "size") Integer pageSize) {
+        return bookService.listBooks(bookCategory, author, pageNumber, pageSize);
     }
 
     @PutMapping(value = BOOK_PATH_ID)
