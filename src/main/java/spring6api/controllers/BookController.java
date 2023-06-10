@@ -14,6 +14,7 @@ import spring6api.services.BookService;
 
 @RestController
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:5173")
 public class BookController {
     private final BookService bookService;
     private final static String BOOK_PATH = "book";

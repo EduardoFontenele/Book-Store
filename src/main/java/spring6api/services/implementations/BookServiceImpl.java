@@ -89,9 +89,7 @@ public class BookServiceImpl implements BookService {
             }
         }
 
-        Sort sort = Sort.by(Sort.Order.asc("name"));
-
-        return PageRequest.of(queryPageNumber, queryPageSize, sort);
+        return PageRequest.of(queryPageNumber, queryPageSize);
     }
 
     private Page<Book> listBooksByAuthorName(String author, Pageable pageRequest) {
