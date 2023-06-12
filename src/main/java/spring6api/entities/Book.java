@@ -17,6 +17,7 @@ import java.math.BigDecimal;
 public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @NotEmpty
     private Integer id;
 
     @Column(columnDefinition = "VARCHAR(255)", nullable = false)
@@ -26,7 +27,7 @@ public class Book {
     @Column(columnDefinition = "DEFAULT 0")
     private Integer quantity;
 
-    @Digits(integer = 4, fraction = 2)
+    @Column(columnDefinition = "DECIMAL(4,2)")
     private BigDecimal price;
 
     @Column(columnDefinition = "TEXT")

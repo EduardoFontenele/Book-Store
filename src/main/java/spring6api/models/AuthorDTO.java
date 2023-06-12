@@ -2,9 +2,9 @@ package spring6api.models;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
-import org.springframework.lang.NonNull;
 
 @Getter
 @Setter
@@ -14,8 +14,8 @@ import org.springframework.lang.NonNull;
 public class AuthorDTO {
     private Integer id;
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    @NonNull
-    @NotEmpty
+    @NotNull
+    @NotEmpty(message = "Name cannot be empty")
     @Size(max = 255)
     private String name;
 }
